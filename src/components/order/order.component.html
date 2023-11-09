@@ -1,0 +1,11 @@
+<h2>Group Order</h2>
+
+<p>{{ currentOrder?.name }}</p>
+<div *ngFor="let order of currentOrder?.orders">
+  <p>{{ order.customerName }}</p>
+  <ul>
+    <li *ngFor="let item of order.items">{{ item }}</li>
+  </ul>
+</div>
+
+<app-add-order-item [groupOrderId]="currentOrder?.id"></app-add-order-item>

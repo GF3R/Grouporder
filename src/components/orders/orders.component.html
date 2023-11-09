@@ -1,0 +1,19 @@
+<h2>Open Orders</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Order Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders$ | async">
+      <td>
+        <a href="/order/{{ order.id }}">{{ order.id }}</a>
+      </td>
+      <td>{{ order.name }}</td>
+      <td>{{ order.total }}</td>
+    </tr>
+  </tbody>
+</table>
