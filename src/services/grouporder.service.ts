@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { GroupOrder } from 'src/model/GroupOrder';
 import { Order } from 'src/model/Order';
 
@@ -18,24 +18,36 @@ export class GrouporderService {
     ]),
   ];
 
+  groupOrdersSubject = new BehaviorSubject<GroupOrder[]>(this.mockData);
+  groupOrders$ = this.groupOrdersSubject.asObservable();
+
   constructor() {}
 
   getActiveOrders(): Observable<GroupOrder[]> {
     // mock data
-    return of(this.mockData);
+    return this.groupOrders$;
   }
 
   getGroupOrder(id: number): Observable<GroupOrder | undefined> {
     // mock data
-    return of(this.mockData.find((order) => order.id === id));
+    return this.groupOrders$.pipe(
+      map((orders) => orders.find((order) => order.id === id))
+    );
   }
 
   getOrder(groupId: number, orderId: number): Observable<Order | undefined> {
-    // mock data
-    return of(
-      this.mockData
-        .find((order) => order.id === groupId)
-        ?.orders.find((order) => order.id === orderId)
+    return this.groupOrders$.pipe(
+      map((orders) =>
+        orders
+          .find((order) => order.id === groupId)
+          ?.orders.find((order) => order.id === orderId)
+      )
     );
+  }
+
+  addOrderItem(groupId: number, order: Order) {
+    const currentGroupOrder = this.groupOrdersSubject.value;
+    currentGroupOrder.find((order) => order.id === groupId)?.orders.push(order);
+    this.groupOrdersSubject.next([...currentGroupOrder]);
   }
 }

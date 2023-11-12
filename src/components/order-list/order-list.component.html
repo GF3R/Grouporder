@@ -1,0 +1,8 @@
+<div class="form-group">
+  <mat-form-field>
+    <mat-label>Foodname</mat-label>
+    <input matInput [(ngModel)]="currentItem" />
+  </mat-form-field>
+</div>
+<p *ngFor="let item of items">{{ item }}</p>
+<button (click)="addItem()" mat-button>add food</button>

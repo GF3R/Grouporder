@@ -9,7 +9,7 @@ import { GrouporderService } from 'src/services/grouporder.service';
   styleUrls: ['./orders.component.css'],
 })
 export class OrdersComponent implements OnInit {
-  orders$ = this.groupOrderService.getActiveOrders();
+  orders$ = this.groupOrderService.groupOrders$;
   constructor(private groupOrderService: GrouporderService) {}
 
   ngOnInit() {}

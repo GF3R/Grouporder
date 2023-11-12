@@ -9,6 +9,8 @@
       }}</mat-error>
     </mat-form-field>
 
+    <app-order-list></app-order-list>
+
     <mat-form-field>
       <mat-label>Total deiner Bestellung</mat-label>
       <input matInput placeholder="z.b. Test" formControlName="total" />
@@ -18,4 +20,4 @@
     </mat-form-field>
   </div>
 </div>
-<button type="submit">Bestellung hinzufügen</button>
+<button (click)="addToOrder()" mat-button color="primary">hinzufügen</button>

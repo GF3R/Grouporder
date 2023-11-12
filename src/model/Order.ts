@@ -18,9 +18,7 @@ export class Order {
     this.total = total;
   }
 
-  createFormGroup(
-    formBuilder: FormBuilder
-  ): FormGroup<{
+  createFormGroup(formBuilder: FormBuilder): FormGroup<{
     customerName: FormControl;
     items: FormControl;
     total: FormControl;
@@ -30,5 +28,22 @@ export class Order {
       items: [this.items],
       total: [this.total],
     });
+  }
+
+  static createFromForm(
+    id: number,
+    form: FormGroup<{
+      customerName: FormControl;
+      items: FormControl;
+      total: FormControl;
+    }>,
+    items: string[]
+  ): Order {
+    return new Order(
+      id,
+      form.value.customerName,
+      form.value.items,
+      form.value.total
+    );
   }
 }
