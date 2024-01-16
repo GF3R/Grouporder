@@ -81,6 +81,7 @@ export class OrdersComponent implements OnInit {
   edit() {
     this.isEditMode = true;
     this.editedOrders = [];
+    this.selectedItems.clear();
   }
 
   cancel() {

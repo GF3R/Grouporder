@@ -33,7 +33,7 @@
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns"
-        (click)="onRowClick(row.id)"
+        (click)="isEditMode ? null : onRowClick(row.id)"
         [style.background]="isSelected(row.id) ? 'rgb(172, 172, 172)' : ''"
       ></tr>
     </table>
