@@ -1,13 +1,14 @@
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 export class Order {
-  id: number;
+  id: string;
   customerName: string;
   items: string[];
   total: number;
+  value: any;
 
   constructor(
-    id: number,
+    id: string,
     customerName: string,
     items: string[],
     total: number
@@ -31,7 +32,7 @@ export class Order {
   }
 
   static createFromForm(
-    id: number,
+    id: string,
     form: FormGroup<{
       customerName: FormControl;
       items: FormControl;
@@ -43,7 +44,9 @@ export class Order {
       id,
       form.value.customerName,
       form.value.items,
-      form.value.total
+      +form.value.total
     );
   }
+
+
 }

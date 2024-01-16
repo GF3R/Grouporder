@@ -1,0 +1,16 @@
+
+body {
+    margin: 50px;
+}
+
+.no-click {
+    pointer-events: none;
+    margin-top: 10px; 
+}
+
+input {
+    padding: 10px; 
+    border: 1px solid black;
+    border-radius: 4px;
+}
+

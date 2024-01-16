@@ -6,10 +6,11 @@ import { OrdersComponent } from 'src/components/orders/orders.component';
 const routes: Routes = [
   { path: 'orders', component: OrdersComponent },
   { path: 'order/:id', component: OrderComponent },
+  { path: '', redirectTo: '/orders', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

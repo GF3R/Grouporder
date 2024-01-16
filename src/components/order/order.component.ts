@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, map } from 'rxjs';
+import { map, take } from 'rxjs';
 import { GroupOrder } from 'src/model/GroupOrder';
+import { Order } from 'src/model/Order';
 import { GrouporderService } from 'src/services/grouporder.service';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-order',
@@ -10,22 +12,23 @@ import { GrouporderService } from 'src/services/grouporder.service';
   styleUrls: ['./order.component.css'],
 })
 export class OrderComponent implements OnInit {
-  currentOrder$ = this.grouporderService.groupOrders$.pipe(
-    map((orders) => {
-      return orders.find(
-        (order) => order.id === this.currentOrderIdSubject.value
-      );
-    })
-  );
+  @Input() order: Order | undefined;
 
-  currentOrderIdSubject = new BehaviorSubject<number | undefined>(undefined);
-  currentOrderId$ = this.currentOrderIdSubject
-    .asObservable()
-    .pipe(map((id) => id ?? 0));
-  totalSum$ = this.currentOrder$.pipe(
+  displayedColumns = ['Name', 'Foodlist', 'Total'];
+  currentGroupOrderId!: string;
+  grandparentItems: string[] = [];
+  groupOrders$ = this.groupOrderService.groupOrders$;
+  currentOrders$ = this.groupOrderService.customerOrders$;
+  currentGroupOrderName: string = " ";
+  editedOrders: Order[] = [];
+  isEditMode: boolean = false;
+
+  selectedItems: Set<string> = new Set<string>();
+
+  totalSum$ = this.currentOrders$.pipe(
     map(
       (order) =>
-        order?.orders.reduce(
+        order?.reduce(
           (sum, order) => Number(sum) + Number(order.total),
           0
         ) ?? 0
@@ -34,12 +37,82 @@ export class OrderComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private grouporderService: GrouporderService
-  ) {}
+    private groupOrderService: GrouporderService
+  ) { }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.currentOrderIdSubject.next(Number(params.get('id')));
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.currentGroupOrderId = params['id'];
     });
+    console.log(this.currentGroupOrderId);
+    this.groupOrderService.getActiveGroupOrders().subscribe();
+    this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
+    this.groupOrders$.pipe(
+      map((order: GroupOrder[]) => {
+        const orderName = order.find(u => u.id = this.currentGroupOrderId);
+        return orderName ? `${orderName.name}` : 'User not found';
+      })
+    ).subscribe((name: string) => {
+      this.currentGroupOrderName = name;
+    });
+    console.log(this.currentGroupOrderId, this.currentOrders$)
   }
+
+  onItemsChange(updatedItems: string[]) {
+    this.grandparentItems = updatedItems;
+  }
+
+  onChange(order: Order) {
+    const existingIndex = this.editedOrders.findIndex(o => o.id === order.id);
+
+    if (existingIndex !== -1) {
+      this.editedOrders[existingIndex] = order;
+    } else {
+      this.editedOrders.push(order);
+    }
+  }
+
+  edit() {
+    this.isEditMode = true;
+    this.editedOrders = [];
+  }
+
+  cancel() {
+    this.isEditMode = false;
+    this.editedOrders = [];
+  }
+
+  save() {
+    this.isEditMode = false;
+    this.groupOrderService.updateCustomerOrders(this.editedOrders, this.currentGroupOrderId).subscribe(() => {
+      this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
+    });
+    console.log(this.editedOrders);
+    this.editedOrders = [];
+  }
+
+  deleteOrder() {
+    try {
+      if (this.selectedItems.size > 0) {
+        const selectedItemsId = Array.from(this.selectedItems);
+        this.groupOrderService.deleteCustomerOrder(selectedItemsId).subscribe();
+        this.selectedItems.clear();
+      }
+    } catch (error) {
+      console.error('Error deleting group orders:', error);
+    }
+  }
+
+  onRowClick(orderId: string): void {
+    if (this.selectedItems.has(orderId)) {
+      this.selectedItems.delete(orderId);
+    } else {
+      this.selectedItems.add(orderId);
+    }
+  }
+
+  isSelected(orderId: string): boolean {
+    return this.selectedItems.has(orderId);
+  }
+
 }

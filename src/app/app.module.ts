@@ -10,8 +10,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatInputModule } from '@angular/material/input';
 import { OrderListComponent } from 'src/components/order-list/order-list.component';
+import { MatTableModule } from '@angular/material/table';
+import { HttpClientModule } from '@angular/common/http';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
+
+
+
 
 @NgModule({
   declarations: [
@@ -22,16 +31,22 @@ import { OrderListComponent } from 'src/components/order-list/order-list.compone
     AddOrderItemComponent,
   ],
   imports: [
+    MatInputModule,
+    MatListModule,
+    MatDividerModule,
+    MatCardModule,
+    MatCheckboxModule,
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule,
     BrowserAnimationsModule,
+    MatTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

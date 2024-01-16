@@ -1,25 +1,43 @@
-<h2>Bestellung hinzufügen</h2>
-<div [formGroup]="form">
-  <div class="form-group">
-    <mat-form-field>
-      <mat-label>Dein Name</mat-label>
-      <input matInput placeholder="z.b. Test" formControlName="customerName" />
-      <mat-error *ngIf="form.controls.customerName.invalid">{{
-        form.controls.customerName.errors | json
-      }}</mat-error>
-    </mat-form-field>
-
-    <app-order-list></app-order-list>
-
-    <div>
+<body>
+  <h2>Bestellung hinzufügen</h2>
+  <div [formGroup]="form">
+    <div class="form-group">
       <mat-form-field>
-        <mat-label>Total deiner Bestellung</mat-label>
-        <input matInput placeholder="z.b. Test" formControlName="total" />
-        <mat-error *ngIf="form.controls.total.invalid">{{
-          form.controls.total.errors | json
-        }}</mat-error>
+        <mat-label>Dein Name</mat-label>
+        <input
+          matInput
+          placeholder="z.b. Test"
+          formControlName="customerName"
+          required
+          [style.background]="empty ? 'rgb(172, 172, 172)' : ''"
+        />
       </mat-form-field>
+
+      <app-order-list
+        [items]="parentItems"
+        (itemsChange)="onItemsChange($event)"
+      >
+      </app-order-list>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Total deiner Bestellung</mat-label>
+          <input
+            matInput
+            placeholder="z.b. 20"
+            formControlName="total"
+            required
+          />
+        </mat-form-field>
+      </div>
     </div>
   </div>
-</div>
-<button (click)="addToOrder()" mat-button color="primary">hinzufügen</button>
+  <button (click)="addToOrder()" mat-raised-button>hinzufügen</button>
+  <button
+    mat-raised-button
+    [routerLink]="['/orders']"
+    style="margin-left: 10px"
+  >
+    Back
+  </button>
+</body>
