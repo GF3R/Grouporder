@@ -92,7 +92,6 @@ export class GrouporderService {
 
     const url = `${this.url}/addGroupOrder`;
     return this.http.post<GroupOrder[]>(url, newGroupOrder).pipe(
-
       catchError(this.handleError<GroupOrder[]>('addGroupOrder'))
     );
   }
@@ -114,5 +113,4 @@ export class GrouporderService {
       catchError(this.handleError<any>('updateGroupOders'))
     );
   }
-
 }

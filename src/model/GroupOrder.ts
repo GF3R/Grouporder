@@ -7,49 +7,63 @@ export class GroupOrder {
   orders?: Order[];
   total?: number;
 
-  constructor(id: string, name: string, orders: Order[] = [], total: number) {
-    this.id = id;
+  constructor(name: string) {
+    // this.id = id;
     this.name = name;
-    this.orders = orders;
-    this.total = total;
+    // this.orders = orders;
+    // this.total = total;
     // this.total = orders.reduce((acc, order) => acc + order.total, 0);
   }
 
   createFormGroup(formBuilder: FormBuilder): FormGroup<{
     name: FormControl;
-    orders: FormControl;
-    total: FormControl;
+    // orders: FormControl;
+    // total: FormControl;
   }> {
     return formBuilder.group({
       name: [this.name],
-      orders: [this.orders],
-      total: [this.total],
+      // orders: [this.orders],
+      // total: [this.total],
     });
   }
+
+  // static createFromForm(
+  //   id: string,
+  //   form: FormGroup<{
+  //     name: FormControl;
+  //     orders: FormControl;
+  //     total: FormControl;
+  //   }>,
+  //   orderItems: string[]
+  // ): GroupOrder {
+  //   const orders: Order[] | null | undefined = form.value.orders;
+
+  //   const orderList: Order[] = orders ? orders.map((order: any) => {
+  //     return new Order(
+  //       order.id,
+  //       order.customerName,
+  //       order.items,
+  //       order.total
+  //     );
+  //   }) : [];
+
+  //   return new GroupOrder(
+  //     id,
+  //     form.value.name,
+  //     orderList,
+  //     +form.value.total
+  //   );
 
   static createFromForm(
-    id: string,
     form: FormGroup<{
       name: FormControl;
-      orders: FormControl;
-      total: FormControl;
     }>,
-    orderItems: string[]
   ): GroupOrder {
-    const orders: Order[] = form.value.orders.map((order: any) => {
-      return new Order(
-        order.id,
-        order.customerName,
-        order.items,
-        order.total
-      );
-    });
-
     return new GroupOrder(
-      id,
-      form.value.name,
-      orders,
-      +form.value.total
+
+      form.value.name
     );
+
   }
+
 }

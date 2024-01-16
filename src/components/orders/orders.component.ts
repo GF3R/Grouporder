@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { GroupOrder } from 'src/model/GroupOrder';
 import { GrouporderService } from 'src/services/grouporder.service';
 
@@ -22,11 +22,9 @@ export class OrdersComponent implements OnInit {
 
   groupOrderForm: FormGroup<{
     name: FormControl;
-    orders: FormControl;
-    total: FormControl;
   }>;
   constructor(private groupOrderService: GrouporderService, private fb: FormBuilder) {
-    this.groupOrderForm = new GroupOrder('', '', [], 0).createFormGroup(this.fb);
+    this.groupOrderForm = new GroupOrder('').createFormGroup(this.fb);
   }
 
   ngOnInit() {
@@ -36,13 +34,12 @@ export class OrdersComponent implements OnInit {
 
   addGroupOrder() {
     try {
-      const placeHolder = '99';
       this.groupOrderService.addGroupOrderWithValidation(GroupOrder.createFromForm(
-        placeHolder,
-        this.groupOrderForm,
-        []
-      )).subscribe();
-      this.groupOrderForm.reset();
+        this.groupOrderForm
+      )).subscribe(() => {
+        this.groupOrderForm.reset();
+        this.groupOrderService.getActiveGroupOrders().subscribe();
+      });
     } catch (error) {
       console.error('Error adding group order:', error);
     }
