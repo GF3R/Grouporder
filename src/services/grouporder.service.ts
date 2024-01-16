@@ -61,9 +61,6 @@ export class GrouporderService {
 
     const url = `${this.url}/${id}/addCustomerOrder`;
     return this.http.post<Order[]>(url, order).pipe(
-      tap((response: Order[]) => {
-        this.customerOrdersSubject.next(response);
-      }),
       catchError(this.handleError<Order[]>('addCustomerOrder'))
     );
   }
