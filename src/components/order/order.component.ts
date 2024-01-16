@@ -47,15 +47,6 @@ export class OrderComponent implements OnInit {
     console.log(this.currentGroupOrderId);
     this.groupOrderService.getActiveGroupOrders().subscribe();
     this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
-    this.groupOrders$.pipe(
-      map((order: GroupOrder[]) => {
-        const orderName = order.find(u => u.id = this.currentGroupOrderId);
-        return orderName ? `${orderName.name}` : 'User not found';
-      })
-    ).subscribe((name: string) => {
-      this.currentGroupOrderName = name;
-    });
-    console.log(this.currentGroupOrderId, this.currentOrders$)
   }
 
   onItemsChange(updatedItems: string[]) {
