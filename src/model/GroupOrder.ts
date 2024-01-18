@@ -15,7 +15,7 @@ export class GroupOrder {
     name: FormControl;
   }> {
     return formBuilder.group({
-      name: [this.name],
+      name: [this.name, [Validators.required]],
     });
   }
 

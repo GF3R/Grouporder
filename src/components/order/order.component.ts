@@ -71,6 +71,7 @@ export class OrderComponent implements OnInit {
   cancel() {
     this.isEditMode = false;
     this.editedOrders = [];
+    this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
   }
 
   save() {

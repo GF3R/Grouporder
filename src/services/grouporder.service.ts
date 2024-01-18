@@ -43,9 +43,7 @@ export class GrouporderService {
   getCustomerOrdersFromGroupOrder(id: string): Observable<Order[]> {
     const url = `${this.url}/${id}/getCustomerOrders`;
     return this.http.get<Order[]>(url).pipe(
-      tap((orders: Order[]) => {
-        this.customerOrdersSubject.next(orders);
-      }),
+      tap((orders: Order[]) => this.customerOrdersSubject.next(orders)),
       catchError(this.handleError<Order[]>(`getCustomerOrders of groupOrder with id=${id}`))
     );
   }
