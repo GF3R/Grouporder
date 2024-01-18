@@ -18,6 +18,8 @@ export class OrdersComponent implements OnInit {
   editedOrders: GroupOrder[] = [];
   isEditMode: boolean = false;
 
+  currentItem = '';
+
   groupOrderForm: FormGroup<{
     name: FormControl;
   }>;

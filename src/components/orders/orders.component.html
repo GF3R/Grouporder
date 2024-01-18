@@ -68,7 +68,7 @@
     <form [formGroup]="groupOrderForm">
       <mat-form-field appearance="fill">
         <mat-label>Group order name</mat-label>
-        <input matInput formControlName="name" />
+        <input matInput formControlName="name" [(ngModel)]="currentItem" />
       </mat-form-field>
     </form>
 
@@ -76,6 +76,7 @@
       (click)="addGroupOrder()"
       style="margin-top: 10px"
       mat-raised-button
+      [disabled]="!currentItem"
     >
       Add a new group order
     </button>
@@ -84,6 +85,7 @@
       (click)="deleteGroupOrder()"
       style="margin-top: 10px; margin-left: 10px"
       mat-raised-button
+      [disabled]="selectedItems.size == 0"
     >
       Delete selected group order/s
     </button>
