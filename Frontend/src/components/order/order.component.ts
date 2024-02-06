@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs';
-import { GroupOrder } from 'src/model/GroupOrder';
 import { Order } from 'src/model/Order';
 import { GrouporderService } from 'src/services/grouporder.service';
 import { __values } from 'tslib';
@@ -22,15 +21,6 @@ export class OrderComponent implements OnInit {
   currentGroupOrderName: string = " ";
   editedOrders: Order[] = [];
   isEditMode: boolean = false;
-
-  // @Input()
-  // public get getTotal() {
-  //   return this.order?.total;
-  // }
-
-  // public set setTotal(value: number) {
-  //   this.order!.total = value;
-  // }
 
   selectedItems: Set<string> = new Set<string>();
 
@@ -56,11 +46,11 @@ export class OrderComponent implements OnInit {
     console.log(this.currentGroupOrderId);
     this.groupOrderService.getActiveGroupOrders().subscribe();
     this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
+    this.groupOrderService.foodItems$.subscribe(items => {
+      this.grandparentItems = items;
+    });
   }
 
-  onItemsChange(updatedItems: string[]) {
-    this.grandparentItems = updatedItems;
-  }
 
   onChange(order: Order) {
     const existingIndex = this.editedOrders.findIndex(o => o.id === order.id);
@@ -69,6 +59,21 @@ export class OrderComponent implements OnInit {
       this.editedOrders[existingIndex] = order;
     } else {
       this.editedOrders.push(order);
+    }
+  }
+
+  get total(): number {
+    return this.isEditMode ? this.order!.total : this.order!.total;
+  }
+
+  set total(value: number) {
+    this.order!.total = value;
+  }
+
+  onInputChange(event: any): void {
+    const value = event!.target!.value;
+    if (value !== undefined) {
+      this.total = value;
     }
   }
 

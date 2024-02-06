@@ -7,12 +7,7 @@
         <input matInput formControlName="customerName" required />
       </mat-form-field>
 
-      <app-order-list
-        [empty]="empty"
-        [items]="parentItems"
-        (itemsChange)="onItemsChange($event)"
-      >
-      </app-order-list>
+      <app-order-list [empty]="empty" [items]="parentItems"> </app-order-list>
 
       <div>
         <mat-form-field>

@@ -16,7 +16,6 @@ export class AddOrderItemComponent implements OnInit {
   @Input() order: Order | undefined;
 
   @Input() parentItems: string[] = [];
-  @Output() itemsChange: EventEmitter<string[]> = new EventEmitter<string[]>();
 
   @Output() empty: boolean | undefined;
 
@@ -35,7 +34,7 @@ export class AddOrderItemComponent implements OnInit {
   ngOnInit() { }
 
   addToOrder() {
-    if (this.parentItems) {
+    if (this.parentItems.length > 0) {
       this.form.patchValue({ items: this.parentItems });
       this.orderService.addCustomerOrderWithValidation(
         this.groupOrderId!,
@@ -46,10 +45,6 @@ export class AddOrderItemComponent implements OnInit {
     } else {
       this.empty = true;
     }
-  }
-
-  onItemsChange(updatedItems: string[]) {
-    this.parentItems = updatedItems;
   }
 
 }

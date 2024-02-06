@@ -5,11 +5,11 @@ namespace Bestellung.Backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class BestellungController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public WeatherForecastController(ApplicationDbContext context)
+        public BestellungController(ApplicationDbContext context)
         {
             _context = context;
         }

@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class GrouporderService {
 
-  private url = 'https://localhost:7208/WeatherForecast';
+  private url = 'https://localhost:7208/Bestellung';
 
   private groupOrdersSubject = new BehaviorSubject<GroupOrder[]>([]);
   public groupOrders$ = this.groupOrdersSubject.asObservable();
@@ -18,7 +18,8 @@ export class GrouporderService {
   private customerOrdersSubject = new BehaviorSubject<Order[]>([]);
   public customerOrders$ = this.customerOrdersSubject.asObservable();
 
-  currentOrderIdSubject = new BehaviorSubject<number | undefined>(undefined);
+  private foodItemsSubject: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  foodItems$: Observable<string[]> = this.foodItemsSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -88,6 +89,12 @@ export class GrouporderService {
     return this.http.post<GroupOrder[]>(url, newGroupOrder).pipe(
       catchError(this.handleError<GroupOrder[]>('addGroupOrder'))
     );
+  }
+
+  addFoodItem(item: string): void {
+    const currentItems = this.foodItemsSubject.getValue();
+    const updatedItems = [...currentItems, item];
+    this.foodItemsSubject.next(updatedItems);
   }
 
   deleteGroupOrders(ids: string[]): Observable<GroupOrder[]> {
