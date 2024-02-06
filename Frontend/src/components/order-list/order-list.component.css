@@ -1,0 +1,9 @@
+.default {
+    margin-bottom: 10px;
+    background-color: rgb(219, 222, 224);
+}
+  
+.item {
+    margin-bottom: 10px;
+    background-color: rgb(159, 162, 163);
+}

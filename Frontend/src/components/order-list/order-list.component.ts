@@ -33,10 +33,14 @@ export class OrderListComponent implements OnInit {
   }
 
   toggleSelection(index: number) {
-    console.log("dsaölk", this.selectedIndices, this.items)
     const selectedIndex = this.selectedIndices.indexOf(index);
-    if (selectedIndex !== -1) {
-      this.selectedIndices.splice(selectedIndex, 1);
+    if (this.selectedIndices.length = 1) {
+      if (selectedIndex !== -1) {
+        this.selectedIndices.splice(selectedIndex, 1);
+      } else {
+        this.selectedIndices = [];
+        this.selectedIndices.push(index);
+      }
     } else {
       this.selectedIndices.push(index);
     }

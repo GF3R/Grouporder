@@ -17,22 +17,11 @@
       <div>
         <mat-form-field>
           <mat-label>Total deiner Bestellung</mat-label>
-          <input
-            matInput
-            placeholder="z.b. 20"
-            formControlName="total"
-            required
-          />
+          <input matInput formControlName="total" required />
         </mat-form-field>
       </div>
     </div>
   </div>
   <button (click)="addToOrder()" mat-raised-button>hinzufügen</button>
-  <button
-    mat-raised-button
-    [routerLink]="['/orders']"
-    style="margin-left: 10px"
-  >
-    Back
-  </button>
+  <button mat-raised-button [routerLink]="['/orders']">Back</button>
 </body>
