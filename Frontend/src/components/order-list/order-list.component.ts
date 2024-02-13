@@ -8,16 +8,15 @@ import { GrouporderService } from 'src/services/grouporder.service';
   styleUrls: ['./order-list.component.css'],
 })
 export class OrderListComponent implements OnInit {
-  items: { id: string, name: string }[] = [];
+  items: string[] = [];
   currentItem = '';
 
   itemFormControl = new FormControl('', [Validators.required]);
 
   constructor(private orderService: GrouporderService) {
     this.orderService.foodItems$.subscribe(items => {
-      this.items = items.map((item, index) => ({ id: index.toString(), name: item }));
+      this.items = items;
     });
-
   }
 
   ngOnInit() {
@@ -34,19 +33,13 @@ export class OrderListComponent implements OnInit {
   }
 
   addItem() {
-    if (!this.currentItem) {
-      this.itemFormControl.markAsTouched();
-      this.itemFormControl.setErrors({ 'required': true });
-    } else {
-      this.orderService.addFoodItem(this.currentItem);
-      this.currentItem = '';
-      this.itemFormControl.setValue('');
-    }
+    this.orderService.addFoodItem(this.currentItem);
+    this.itemFormControl.setValue(null);
+    this.currentItem = '';
   }
 
-  deleteItem(item: { id: string, name: string }) {
-    this.items = this.items.filter(i => i.id !== item.id);
-    this.orderService.deleteFoodItem(item.name);
+  deleteItem(index: number) {
+    this.orderService.deleteFoodItem(index);
   }
 
 }

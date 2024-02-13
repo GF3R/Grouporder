@@ -1,0 +1,8 @@
+<div *ngFor="let item of order?.items">
+  <div *ngIf="!toggleEditMode">
+    {{ item.name }}
+  </div>
+  <div *ngIf="toggleEditMode">
+    <input type="text" [(ngModel)]="item.name" />
+  </div>
+</div>

@@ -119,13 +119,15 @@ export class GrouporderService {
     );
   }
 
-  deleteFoodItem(item: string): Observable<void> {
-    this.foodItemsSubject.next(
-      this.foodItemsSubject.value.filter(i => i !== item)
-    );
-    const url = `${this.url}/deleteItem/${item}`;
+  deleteFoodItem(index: number): Observable<void> {
+    const currentItems = this.foodItemsSubject.getValue();
+    const updatedItems = currentItems.filter((item, i) => i !== index);
+    this.foodItemsSubject.next(updatedItems);
+
+    const url = `${this.url}/deleteItem/${index}`;
     return this.http.delete<void>(url).pipe(
       catchError(this.handleError<void>('deleteItem'))
     );
   }
+
 }

@@ -10,7 +10,7 @@
             {{ order.customerName }}
           </div>
           <div *ngIf="isEditMode(order.id)">
-            <input type="text" [(ngModel)]="order.customerName" />
+            <input [(ngModel)]="order.customerName" />
           </div>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
@@ -19,14 +19,10 @@
       <ng-container matColumnDef="items">
         <th mat-header-cell *matHeaderCellDef>Foodlist</th>
         <td mat-cell *matCellDef="let order">
-          <div *ngFor="let item of order.items">
-            <div *ngIf="!isEditMode(order.id)">
-              {{ item.name }}
-            </div>
-            <div *ngIf="isEditMode(order.id)">
-              <input type="text" [(ngModel)]="item.name" />
-            </div>
-          </div>
+          <app-order-item
+            [order]="order"
+            [toggleEditMode]="isEditMode(order.id)"
+          ></app-order-item>
         </td>
         <td mat-footer-cell *matFooterCellDef><strong>Total sum</strong></td>
       </ng-container>
@@ -35,14 +31,14 @@
         <th mat-header-cell *matHeaderCellDef>Total</th>
         <td mat-cell *matCellDef="let order">
           <div *ngIf="!isEditMode(order.id)">
-            {{ order.total }}
+            {{ order.total | currency : "CHF " }}
           </div>
           <div *ngIf="isEditMode(order.id)">
             <input type="number" [(ngModel)]="order.total" />
           </div>
         </td>
         <td mat-footer-cell *matFooterCellDef>
-          <strong>{{ totalSum$ | async }}</strong>
+          <strong> {{ totalSum$ | async | currency : "CHF " }}</strong>
         </td></ng-container
       >
 
