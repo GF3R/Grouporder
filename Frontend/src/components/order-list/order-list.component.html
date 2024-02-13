@@ -1,33 +1,29 @@
-<div class="form-group">
-  <mat-form-field>
-    <mat-label>Foodname</mat-label>
-    <input matInput [(ngModel)]="currentItem" required />
-  </mat-form-field>
+<div class="form-container">
+  <div class="form-group">
+    <mat-form-field appearance="fill">
+      <mat-label>Foodname</mat-label>
+      <input
+        matInput
+        [formControl]="itemFormControl"
+        (keydown.enter)="addItem()"
+      />
+      <button mat-icon-button matSuffix (click)="addItem()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-error *ngIf="itemFormControl.hasError('required')">
+        {{ getErrorMessage() }}
+      </mat-error>
+    </mat-form-field>
+  </div>
 </div>
 
-<mat-list>
-  <mat-list-item
-    *ngFor="let item of items; let i = index"
-    (click)="toggleSelection(i)"
-    [ngClass]="isSelected(i) ? 'item' : 'default'"
-  >
-    {{ item }}
-  </mat-list-item>
-</mat-list>
-
-<button
-  (click)="addItem()"
-  style="margin-bottom: 30px"
-  mat-raised-button
-  [disabled]="!currentItem"
->
-  add food
-</button>
-<button
-  (click)="deleteSelected()"
-  mat-raised-button
-  style="margin-bottom: 30px; margin-left: 10px"
-  [disabled]="selectedIndices.length === 0"
->
-  Delete food
-</button>
+<div class="list-container">
+  <mat-list>
+    <mat-list-item *ngFor="let item of items; let i = index" class="list-item">
+      {{ item.name }}
+      <button mat-icon-button class="delete-button" (click)="deleteItem(item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+</div>

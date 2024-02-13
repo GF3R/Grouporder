@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "smSmm0wMMG7mBNM5gYctHRsuviSoLI6RNKNJxvEvDBVAjfNtKFVWDD4KXFdhxtFn4tRXNrTumd6TEpPOApxGiw==",
+  "dgSpecHash": "tZo62da7bWZ5Ybpc4kO8zQ/55PrYQFJ7rOPTm37ykmToAT3JIkK0+GuTGD3TNvm127q5Zf/NJUQFi4eD7dg1Aw==",
   "success": true,
   "projectFilePath": "C:\\Users\\tns\\git\\Grouporder\\Bestellung.Backend\\Bestellung.Backend\\Bestellung.Backend.csproj",
   "expectedPackageFiles": [
@@ -81,12 +81,5 @@
     "C:\\Users\\tns\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\tns\\.nuget\\packages\\system.windows.extensions\\5.0.0\\system.windows.extensions.5.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1803",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://ci.nexplore.ch/nuget/api/v2'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
-    }
-  ]
+  "logs": []
 }

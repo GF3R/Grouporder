@@ -43,6 +43,26 @@ namespace Bestellung.Backend.Migrations
                     b.ToTable("GroupOrder");
                 });
 
+            modelBuilder.Entity("Bestellung.Backend.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Item");
+                });
+
             modelBuilder.Entity("Bestellung.Backend.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -56,10 +76,6 @@ namespace Bestellung.Backend.Migrations
                     b.Property<Guid>("GroupOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Items")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
 
@@ -68,6 +84,17 @@ namespace Bestellung.Backend.Migrations
                     b.HasIndex("GroupOrderId");
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Bestellung.Backend.Item", b =>
+                {
+                    b.HasOne("Bestellung.Backend.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Bestellung.Backend.Order", b =>
@@ -79,6 +106,11 @@ namespace Bestellung.Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("GroupOrder");
+                });
+
+            modelBuilder.Entity("Bestellung.Backend.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

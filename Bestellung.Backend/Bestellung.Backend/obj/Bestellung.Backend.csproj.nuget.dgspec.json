@@ -22,8 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "http://ci.nexplore.ch/nuget/api/v2": {},
           "https://api.nuget.org/v3/index.json": {},
+          "https://ci.nexplore.ch/nuget/api/v2": {},
           "https://nuget.nexplore.ch/v3/index.json": {}
         },
         "frameworks": {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
 import { GroupOrder } from 'src/model/GroupOrder';
 import { Order } from 'src/model/Order';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -23,6 +23,10 @@ export class GrouporderService {
 
   constructor(private http: HttpClient) { }
 
+  clearFoodItems(): void {
+    this.foodItemsSubject.next([]);
+  }
+
   private handleError<T>(_operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
@@ -38,6 +42,32 @@ export class GrouporderService {
     return this.http.get<GroupOrder[]>(url).pipe(
       tap((orders: GroupOrder[]) => this.groupOrdersSubject.next(orders)),
       catchError(this.handleError<GroupOrder[]>(`getActiveGroupOrders`))
+    );
+  }
+
+  addGroupOrderWithValidation(newGroupOrder: GroupOrder): Observable<GroupOrder[]> {
+    const currentGroupOrders = this.groupOrdersSubject.getValue();
+    const updatedGroupOrders = [...currentGroupOrders, newGroupOrder];
+    this.groupOrdersSubject.next(updatedGroupOrders);
+
+    const url = `${this.url}/addGroupOrder`;
+    return this.http.post<GroupOrder[]>(url, newGroupOrder).pipe(
+      catchError(this.handleError<GroupOrder[]>('addGroupOrder'))
+    );
+  }
+
+  deleteGroupOrders(id: string): Observable<GroupOrder[]> {
+    const url = `${this.url}/deleteGroupOrder/${id}`;
+    this.groupOrdersSubject.next(this.groupOrdersSubject.value.filter(order => order.id !== id));
+    return this.http.delete<GroupOrder[]>(url).pipe(
+      catchError(this.handleError<GroupOrder[]>('deleteGroupOrder'))
+    );
+  }
+
+  updateGroupOrder(order: GroupOrder, id: string): Observable<any> {
+    const url = `${this.url}/updateGroupOrder/${id}`;
+    return this.http.put(url, order).pipe(
+      catchError(this.handleError<any>('updateGroupOder'))
     );
   }
 
@@ -63,55 +93,39 @@ export class GrouporderService {
     );
   }
 
-  updateCustomerOrders(orders: Order[], id: string): Observable<any> {
-    const url = `${this.url}/${id}/updateCustomerOrders`;
-    return this.http.put(url, orders).pipe(
-      tap(() => {
-        this.customerOrdersSubject.next(orders);
-      }),
-      catchError(this.handleError<any>('updateCustomerOrders'))
+  updateCustomerOrder(order: Order, id: string): Observable<any> {
+    const url = `${this.url}/${id}/updateCustomerOrder`;
+    return this.http.put(url, order).pipe(
+      catchError(this.handleError<any>('updateCustomerOrder'))
     );
   }
 
-  deleteCustomerOrder(ids: string[]): Observable<Order[]> {
-    const url = `${this.url}/deleteCustomerOrders`;
-    this.customerOrdersSubject.next(this.customerOrdersSubject.value.filter(order => !ids.includes(order.id!)));
-    return this.http.delete<Order[]>(url, { body: ids }).pipe(
-      catchError(this.handleError<Order[]>('deleteCustomerOrders')));
-  }
-
-  addGroupOrderWithValidation(newGroupOrder: GroupOrder): Observable<GroupOrder[]> {
-    const currentGroupOrders = this.groupOrdersSubject.getValue();
-    const updatedGroupOrders = [...currentGroupOrders, newGroupOrder];
-    this.groupOrdersSubject.next(updatedGroupOrders);
-
-    const url = `${this.url}/addGroupOrder`;
-    return this.http.post<GroupOrder[]>(url, newGroupOrder).pipe(
-      catchError(this.handleError<GroupOrder[]>('addGroupOrder'))
+  deleteCustomerOrder(id: string): Observable<Order[]> {
+    const url = `${this.url}/deleteCustomerOrder/${id}`;
+    this.customerOrdersSubject.next(this.customerOrdersSubject.value.filter(order => order.id !== id)); // Remove the deleted order from the subject
+    return this.http.delete<Order[]>(url).pipe(
+      catchError(this.handleError<Order[]>('deleteCustomerOrder'))
     );
   }
 
-  addFoodItem(item: string): void {
+  addFoodItem(item: string): Observable<string[]> {
     const currentItems = this.foodItemsSubject.getValue();
     const updatedItems = [...currentItems, item];
     this.foodItemsSubject.next(updatedItems);
-  }
 
-  deleteGroupOrders(ids: string[]): Observable<GroupOrder[]> {
-    const url = `${this.url}/deleteGroupOrders`;
-    this.groupOrdersSubject.next(this.groupOrdersSubject.value.filter((order) => !ids.includes(order.id!)));
-    return this.http.delete<GroupOrder[]>(url, { body: ids }).pipe(
-      catchError(this.handleError<GroupOrder[]>('deleteGroupOrders'))
+    const url = `${this.url}/addItem`;
+    return this.http.post<string[]>(url, item).pipe(
+      catchError(this.handleError<string[]>('addItem'))
     );
   }
 
-  updateGroupOrder(orders: GroupOrder[]): Observable<any> {
-    const url = `${this.url}/updateGroupOrders`;
-    return this.http.put(url, orders, this.httpOptions).pipe(
-      tap(_ => {
-        this.groupOrdersSubject.next(orders);
-      }),
-      catchError(this.handleError<any>('updateGroupOders'))
+  deleteFoodItem(item: string): Observable<void> {
+    this.foodItemsSubject.next(
+      this.foodItemsSubject.value.filter(i => i !== item)
+    );
+    const url = `${this.url}/deleteItem/${item}`;
+    return this.http.delete<void>(url).pipe(
+      catchError(this.handleError<void>('deleteItem'))
     );
   }
 }

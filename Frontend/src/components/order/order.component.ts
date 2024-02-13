@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs';
+import { GroupOrder } from 'src/model/GroupOrder';
 import { Order } from 'src/model/Order';
 import { GrouporderService } from 'src/services/grouporder.service';
 import { __values } from 'tslib';
@@ -13,16 +14,13 @@ import { __values } from 'tslib';
 export class OrderComponent implements OnInit {
   @Input() order: Order | undefined;
 
-  displayedColumns = ['Name', 'Foodlist', 'Total'];
-  currentGroupOrderId!: string;
-  grandparentItems: string[] = [];
+  displayedColumns = ['customerName', 'items', 'total', 'actions'];
   groupOrders$ = this.groupOrderService.groupOrders$;
   currentOrders$ = this.groupOrderService.customerOrders$;
-  currentGroupOrderName: string = " ";
-  editedOrders: Order[] = [];
-  isEditMode: boolean = false;
+  currentGroupOrderName!: string;
+  currentGroupOrderId!: string;
 
-  selectedItems: Set<string> = new Set<string>();
+  editModeMap: Map<string, boolean> = new Map();
 
   totalSum$ = this.currentOrders$.pipe(
     map(
@@ -43,82 +41,46 @@ export class OrderComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.currentGroupOrderId = params['id'];
     });
-    console.log(this.currentGroupOrderId);
     this.groupOrderService.getActiveGroupOrders().subscribe();
     this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
-    this.groupOrderService.foodItems$.subscribe(items => {
-      this.grandparentItems = items;
-    });
+    this.groupOrders$.pipe(
+      map((orders: GroupOrder[]) => {
+        const order = orders.find(u => u.id = this.currentGroupOrderId);
+        return order ? this.currentGroupOrderName = `${order.name}` : 'User not found';
+      })
+    ).subscribe();
   }
 
+  // get gettotal(): number {
+  //   return this.order!.total;
+  // }
 
-  onChange(order: Order) {
-    const existingIndex = this.editedOrders.findIndex(o => o.id === order.id);
+  // set settotal(value: number) {
+  //   this.order!.total = value;
+  // }
 
-    if (existingIndex !== -1) {
-      this.editedOrders[existingIndex] = order;
-    } else {
-      this.editedOrders.push(order);
-    }
-  }
-
-  get total(): number {
-    return this.isEditMode ? this.order!.total : this.order!.total;
-  }
-
-  set total(value: number) {
-    this.order!.total = value;
-  }
-
-  onInputChange(event: any): void {
-    const value = event!.target!.value;
-    if (value !== undefined) {
-      this.total = value;
-    }
-  }
-
-  edit() {
-    this.isEditMode = true;
-    this.editedOrders = [];
-  }
-
-  cancel() {
-    this.isEditMode = false;
-    this.editedOrders = [];
-    this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
-  }
-
-  save() {
-    this.isEditMode = false;
-    this.groupOrderService.updateCustomerOrders(this.editedOrders, this.currentGroupOrderId).subscribe(() => {
+  saveChanges(order: Order, id: string) {
+    this.groupOrderService.updateCustomerOrder(order, id).subscribe(() => {
       this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
     });
-    console.log(this.editedOrders);
-    this.editedOrders = [];
+    this.editModeMap.set(id, false);
   }
 
-  deleteOrder() {
-    try {
-      if (this.selectedItems.size > 0) {
-        const selectedItemsId = Array.from(this.selectedItems);
-        this.groupOrderService.deleteCustomerOrder(selectedItemsId).subscribe();
-        this.selectedItems.clear();
-      }
-    } catch (error) {
-      console.error('Error deleting group orders:', error);
-    }
+  toggleEditMode(id: string) {
+    this.editModeMap.set(id, !this.editModeMap.get(id));
   }
 
-  onRowClick(orderId: string): void {
-    if (this.selectedItems.has(orderId)) {
-      this.selectedItems.delete(orderId);
-    } else {
-      this.selectedItems.add(orderId);
-    }
+  isEditMode(id: string): boolean {
+    return this.editModeMap.get(id) || false;
   }
 
-  isSelected(orderId: string): boolean {
-    return this.selectedItems.has(orderId);
+  cancelEdit(id: string) {
+    this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
+    this.editModeMap.set(id, false);
+  }
+
+  deleteOrder(id: string) {
+    this.groupOrderService.deleteCustomerOrder(id).subscribe();
   }
 
 }

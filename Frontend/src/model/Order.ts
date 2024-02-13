@@ -1,40 +1,32 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 export class Order {
+  [x: string]: any;
   id?: string;
   customerName: string;
-  items: string[];
+  items: { id: string, name: string }[];
   total: number;
-  value: any;
 
   constructor(
     customerName: string,
-    items: string[],
-    total: number
+    items: { id: string, name: string }[],
+    total: number | null
   ) {
     this.customerName = customerName;
     this.items = items;
-    this.total = total;
+    this.total = total!;
   }
 
-  createFormGroup(formBuilder: FormBuilder): FormGroup<{
-    customerName: FormControl;
-    items: FormControl;
-    total: FormControl;
-  }> {
+  createFormGroup(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({
-      customerName: [this.customerName, Validators.required],
-      items: [this.items, Validators.required],
-      total: [this.total, Validators.required],
+      customerName: [this.customerName, [Validators.required]],
+      items: [this.items, [Validators.required]],
+      total: [this.total, [Validators.required]],
     });
   }
 
   static createFromForm(
-    form: FormGroup<{
-      customerName: FormControl;
-      items: FormControl;
-      total: FormControl;
-    }>,
+    form: FormGroup
   ): Order {
     return new Order(
       form.value.customerName,
@@ -42,6 +34,4 @@ export class Order {
       form.value.total
     );
   }
-
-
 }

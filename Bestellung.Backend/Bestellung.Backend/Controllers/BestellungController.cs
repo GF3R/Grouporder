@@ -1,5 +1,6 @@
 using Bestellung.Backend.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bestellung.Backend.Controllers
 {
@@ -37,54 +38,48 @@ namespace Bestellung.Backend.Controllers
             return Ok(GetActiveGroupOrders());
         }
 
-        [HttpDelete("deleteGroupOrders")]
-        public IActionResult DeleteGroupOrders(Guid[] ids)
+        [HttpDelete("deleteGroupOrder/{id}")]
+        public IActionResult DeleteGroupOrder(Guid id)
         {
-            var groupOrdersToDelete = _context.GroupOrder.Where(t => ids.Contains(t.Id)).ToList();
-            _context.GroupOrder.RemoveRange(groupOrdersToDelete);
-            foreach (var deletedOrder in groupOrdersToDelete)
+            var groupOrderToDelete = _context.GroupOrder.FirstOrDefault(t => t.Id == id);
+
+            if (groupOrderToDelete == null)
             {
-                UpdateGroupOrderTotal(deletedOrder.Id);
+                return NotFound();
             }
+
+            _context.GroupOrder.Remove(groupOrderToDelete);
+            _context.SaveChanges();
+
+            return Ok(GetActiveGroupOrders());
+
+        }
+
+        [HttpPut("updateGroupOrder/{id}")]
+        public IActionResult UpdateGroupOrder(GroupOrderNameDto groupOrder, Guid id)
+        {
+            var groupOrderToUpdate = _context.GroupOrder.FirstOrDefault(a => a.Id == id);
+            groupOrderToUpdate.Name = groupOrder.Name;
 
             _context.SaveChanges();
 
             return Ok(GetActiveGroupOrders());
         }
 
-        [HttpPut("updateGroupOrders")]
-        public IActionResult UpdateGroupOrder(List<GroupOrder> updatedOrders)
-        {
-            var orderIds = updatedOrders.Select(o => o.Id).ToList();
-
-            var ordersToUpdate = _context.GroupOrder.Where(t => orderIds.Contains(t.Id)).ToList();
-            foreach (var toUpdateOrder in ordersToUpdate)
-            {
-                var updatedOrder = updatedOrders.FirstOrDefault(o => o.Id == toUpdateOrder.Id);
-
-                if (updatedOrder != null)
-                {
-                    toUpdateOrder.Name = updatedOrder.Name;
-                }
-            }
-
-            _context.SaveChanges();
-
-            return Ok(GetActiveGroupOrders());
-        }
 
         [HttpGet("{id}/getCustomerOrders")]
         public IActionResult GetCustomerOrders(Guid id)
         {
             var orders = _context.Order
-            .Where(order => order.GroupOrderId == id)
-            .ToList();
+                .Include(order => order.Items)
+                .Where(order => order.GroupOrderId == id)
+                .ToList();
 
             var ordersDto = orders.Select(order => new OrderGIdDto
             {
                 Id = order.Id,
                 CustomerName = order.CustomerName,
-                Items = order.Items.Split(','),
+                Items = order.Items.Select(item => new ItemDto { Id = item.Id.ToString(), Name = item.Name }).ToList(),
                 Total = order.Total,
                 GroupOrderId = order.GroupOrderId,
             }).ToList();
@@ -93,17 +88,29 @@ namespace Bestellung.Backend.Controllers
         }
 
         [HttpPost("{id}/addCustomerOrder")]
-        public IActionResult AddCustomerOrder(Guid id, OrderIdDto newOrder)
+        public IActionResult AddCustomerOrder(Guid id, OrderDto newOrder)
         {
             var newOrderToAdd = new Order
             {
                 Id = Guid.NewGuid(),
                 CustomerName = newOrder.CustomerName,
-                Items = string.Join(", ", newOrder.Items),
                 Total = newOrder.Total,
                 GroupOrderId = id,
             };
-            
+
+            foreach (var itemDto in newOrder.Items)
+            {
+                var itemId = Guid.NewGuid();
+                var newItem = new Item
+                {
+                    Id = itemId,
+                    Name = itemDto.Name,
+                    OrderId = newOrderToAdd.Id 
+                };
+
+                newOrderToAdd.Items.Add(newItem);
+            }
+
             _context.Order.Add(newOrderToAdd);
             _context.SaveChanges();
 
@@ -112,40 +119,56 @@ namespace Bestellung.Backend.Controllers
             return GetCustomerOrders(id);
         }
 
-        [HttpPut("{id}/updateCustomerOrders")]
-        public IActionResult UpdateCustomerOrders(List<OrderDto> updatedOrders, Guid id)
+        [HttpPut("{id}/updateCustomerOrder")]
+        public IActionResult UpdateCustomerOrder(Guid id, OrderDto orderDto)
         {
-            var orderIds = updatedOrders.Select(o => o.Id).ToList();
+            var customerOrderToUpdate = _context.Order
+                .Include(o => o.Items)
+                .FirstOrDefault(a => a.Id == id);
 
-            var ordersToUpdate = _context.Order.Where(t => orderIds.Contains(t.Id)).ToList();
-
-            foreach (var toUpdateOrder in ordersToUpdate)
+            if (customerOrderToUpdate == null)
             {
-                var updatedOrder = updatedOrders.FirstOrDefault(o => o.Id == toUpdateOrder.Id);
+                return NotFound();
+            }
 
-                if (updatedOrder != null)
+            customerOrderToUpdate.CustomerName = orderDto.CustomerName;
+            customerOrderToUpdate.Total = orderDto.Total;
+
+            foreach (var itemDto in orderDto.Items)
+            {
+                var existingItem = customerOrderToUpdate.Items.FirstOrDefault(i => i.Id.ToString() == itemDto.Id);
+
+                if (existingItem != null)
                 {
-                    toUpdateOrder.CustomerName = updatedOrder.CustomerName;
-                    toUpdateOrder.Items = updatedOrder.Items;
-                    toUpdateOrder.Total = updatedOrder.Total;
-
-                    UpdateGroupOrderTotal(toUpdateOrder.Id);
+                    existingItem.Name = itemDto.Name;
                 }
             }
 
             _context.SaveChanges();
+            UpdateGroupOrderTotal(customerOrderToUpdate.GroupOrderId);
 
             return Ok(GetCustomerOrders(id));
         }
 
-        [HttpDelete("deleteCustomerOrders")]
-        public IActionResult DeleteCustomerOrder(Guid[] ids)
+        [HttpDelete("deleteCustomerOrder/{id}")]
+        public IActionResult DeleteCustomerOrder(Guid id)
         {
-            var customerOrdersToDelete = _context.Order.Where(t => ids.Contains(t.Id)).ToList();
-            _context.Order.RemoveRange(customerOrdersToDelete);
-            _context.SaveChanges(); 
-            UpdateGroupOrderTotal(customerOrdersToDelete.First().GroupOrderId);
-            return Ok(GetCustomerOrders(customerOrdersToDelete.First().GroupOrderId));
+            var customerOrderToDelete = _context.Order.FirstOrDefault(t => t.Id == id);
+
+            if (customerOrderToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Item.RemoveRange(customerOrderToDelete.Items);
+
+            _context.Order.Remove(customerOrderToDelete);
+
+            _context.SaveChanges();
+
+            UpdateGroupOrderTotal(customerOrderToDelete.GroupOrderId);
+
+            return Ok(GetCustomerOrders(customerOrderToDelete.GroupOrderId));
         }
 
         private void UpdateGroupOrderTotal(Guid groupId)

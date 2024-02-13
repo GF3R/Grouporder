@@ -10,26 +10,32 @@ import { GrouporderService } from 'src/services/grouporder.service';
 })
 
 export class OrdersComponent implements OnInit {
-  displayedColumns = ['Index', 'Customer', 'Order Total'];
+  displayedColumns = ['Index', 'Customer', 'Order Total', 'actions'];
   groupOrders$ = this.groupOrderService.groupOrders$;
 
-  selectedItems: Set<string> = new Set<string>();
-
-  editedOrders: GroupOrder[] = [];
-  isEditMode: boolean = false;
+  editModeMap: Map<string, boolean> = new Map();
 
   currentItem = '';
 
   groupOrderForm: FormGroup<{
     name: FormControl;
   }>;
-  constructor(private groupOrderService: GrouporderService, private fb: FormBuilder) {
-    this.groupOrderForm = new GroupOrder('').createFormGroup(this.fb);
+  editedOrder: GroupOrder | undefined;
+  editModeIndex: number | undefined;
+  constructor(private groupOrderService: GrouporderService, private formBuilder: FormBuilder) {
+    this.groupOrderForm = new GroupOrder('').createFormGroup(this.formBuilder);
   }
 
   ngOnInit() {
-    this.selectedItems.clear();
     this.groupOrderService.getActiveGroupOrders().subscribe();
+  }
+
+  getErrorMessage(): string {
+    const nameControl = this.groupOrderForm.get('name');
+    if (nameControl!.hasError('required') && nameControl!.touched) {
+      return 'Group order name is required';
+    }
+    return '';
   }
 
   addGroupOrder() {
@@ -45,60 +51,27 @@ export class OrdersComponent implements OnInit {
     }
   }
 
-  deleteGroupOrder() {
-    try {
-      if (this.selectedItems.size > 0) {
-        const selectedItemsId = Array.from(this.selectedItems);
-        this.groupOrderService.deleteGroupOrders(selectedItemsId).subscribe();
-        this.selectedItems.clear();
-      }
-    } catch (error) {
-      console.error('Error deleting group orders:', error);
-    }
+  toggleEditMode(id: string) {
+    this.editModeMap.set(id, !this.editModeMap.get(id));
   }
 
-  onRowClick(orderId: string): void {
-    if (this.selectedItems.has(orderId)) {
-      this.selectedItems.delete(orderId);
-    } else {
-      this.selectedItems.add(orderId);
-    }
-    console.log(this.selectedItems);
+  isEditMode(id: string): boolean {
+    return this.editModeMap.get(id) || false;
   }
 
-  isSelected(orderId: string): boolean {
-    return this.selectedItems.has(orderId);
+  saveChanges(order: GroupOrder, id: string) {
+    this.groupOrderService.updateGroupOrder(order, id).subscribe();
+    this.editModeMap.set(id, false);
   }
 
-  onChange(order: GroupOrder) {
-    const existingIndex = this.editedOrders.findIndex(o => o.id === order.id);
-
-    if (existingIndex !== -1) {
-      this.editedOrders[existingIndex] = order;
-    } else {
-      this.editedOrders.push(order);
-    }
+  cancelEdit(id: string) {
+    this.editModeMap.set(id, false);
   }
 
-  edit() {
-    this.isEditMode = true;
-    this.editedOrders = [];
-    this.selectedItems.clear();
-  }
-
-  cancel() {
-    this.isEditMode = false;
-    this.editedOrders = [];
-    this.groupOrderService.getActiveGroupOrders().subscribe();
-  }
-
-  save() {
-    this.isEditMode = false;
-    this.groupOrderService.updateGroupOrder(this.editedOrders).subscribe(() => {
-      this.groupOrderService.getActiveGroupOrders().subscribe();
-    });
-    this.editedOrders = [];
+  deleteOrder(id: string) {
+    this.groupOrderService.deleteGroupOrders(id).subscribe();
   }
 
 }
+
 

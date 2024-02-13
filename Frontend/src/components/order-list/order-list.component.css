@@ -7,3 +7,36 @@
     margin-bottom: 10px;
     background-color: rgb(159, 162, 163);
 }
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+  }
+  
+  .form-group {
+    width: 45%; 
+  }
+  
+  .list-container {
+    width: 45%; 
+  }
+  
+  .item {
+    background-color: #e0e0e0; 
+  }
+
+  
+  .list-item {
+    cursor: pointer;
+  }
+  
+  .delete-button {
+    visibility: hidden;
+  }
+  
+  .list-item:hover .delete-button {
+    visibility: visible;
+  }
+  
+  

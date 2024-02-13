@@ -2,7 +2,7 @@
   <div *ngIf="groupOrders$ | async as groupOrders">
     <h2>Open Orders</h2>
 
-    <table mat-table [dataSource]="groupOrders" class="mat-elevation-z8">
+    <table mat-table [dataSource]="groupOrders">
       <ng-container matColumnDef="Index">
         <th mat-header-cell *matHeaderCellDef>Index</th>
         <td mat-cell *matCellDef="let i = index">{{ i + 1 }}</td>
@@ -11,14 +11,12 @@
       <ng-container matColumnDef="Customer">
         <th mat-header-cell *matHeaderCellDef>Customer</th>
         <td mat-cell *matCellDef="let order">
-          <a href="/order/{{ order.id }}" *ngIf="!isEditMode">{{
-            order.name
-          }}</a>
-          <input
-            *ngIf="isEditMode"
-            [(ngModel)]="order.name"
-            (ngModelChange)="onChange(order)"
-          />
+          <div *ngIf="!isEditMode(order.id)">
+            <a href="/order/{{ order.id }}">{{ order.name }}</a>
+          </div>
+          <div *ngIf="isEditMode(order.id)">
+            <input [(ngModel)]="order.name" />
+          </div>
         </td>
       </ng-container>
 
@@ -29,65 +27,67 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let order; let i = index">
+          <button
+            mat-icon-button
+            *ngIf="!isEditMode(order.id)"
+            (click)="toggleEditMode(order.id)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="isEditMode(order.id)"
+            (click)="saveChanges(order, order.id)"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="isEditMode(order.id)"
+            (click)="cancelEdit(order.id)"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="!isEditMode(order.id)"
+            (click)="deleteOrder(order.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="isEditMode ? null : onRowClick(row.id)"
-        [style.background]="isSelected(row.id) ? 'rgb(172, 172, 172)' : ''"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-
-    <button
-      (click)="save()"
-      mat-raised-button
-      style="margin-top: 10px; float: right"
-      *ngIf="isEditMode"
-    >
-      Save
-    </button>
-    <button
-      (click)="cancel()"
-      mat-raised-button
-      style="margin-top: 10px; float: right"
-      *ngIf="isEditMode"
-    >
-      Cancel
-    </button>
-    <button
-      (click)="edit()"
-      mat-raised-button
-      style="margin-top: 10px; float: right"
-      *ngIf="!isEditMode"
-    >
-      Edit
-    </button>
-
     <br />
     <br />
     <form [formGroup]="groupOrderForm">
       <mat-form-field appearance="fill">
         <mat-label>Group order name</mat-label>
         <input matInput formControlName="name" [(ngModel)]="currentItem" />
+        <button
+          mat-icon-button
+          (click)="addGroupOrder()"
+          [disabled]="!currentItem"
+          matSuffix
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <mat-error
+          *ngIf="
+            groupOrderForm.get('name')!.invalid &&
+            groupOrderForm.get('name')!.touched
+          "
+        >
+          {{ getErrorMessage() }}
+        </mat-error>
       </mat-form-field>
     </form>
-
-    <button
-      (click)="addGroupOrder()"
-      style="margin-top: 10px"
-      mat-raised-button
-      [disabled]="!currentItem"
-    >
-      Add a new group order
-    </button>
-
-    <button
-      (click)="deleteGroupOrder()"
-      style="margin-top: 10px; margin-left: 10px"
-      mat-raised-button
-      [disabled]="selectedItems.size == 0"
-    >
-      Delete selected group order/s
-    </button>
   </div>
 </body>

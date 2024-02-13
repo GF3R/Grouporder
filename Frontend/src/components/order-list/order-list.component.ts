@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { GrouporderService } from 'src/services/grouporder.service';
 
 @Component({
@@ -7,47 +8,45 @@ import { GrouporderService } from 'src/services/grouporder.service';
   styleUrls: ['./order-list.component.css'],
 })
 export class OrderListComponent implements OnInit {
-  @Input() items: string[] = [];
-  @Input() empty: boolean | undefined;
-
+  items: { id: string, name: string }[] = [];
   currentItem = '';
 
-  selectedIndices: number[] = [];
+  itemFormControl = new FormControl('', [Validators.required]);
 
-  constructor(private orderService: GrouporderService) { }
+  constructor(private orderService: GrouporderService) {
+    this.orderService.foodItems$.subscribe(items => {
+      this.items = items.map((item, index) => ({ id: index.toString(), name: item }));
+    });
 
-  ngOnInit() { }
+  }
+
+  ngOnInit() {
+    this.itemFormControl.valueChanges.subscribe(value => {
+      this.currentItem = value!;
+    });
+  }
+
+  getErrorMessage() {
+    if (this.itemFormControl!.hasError('required')) {
+      return 'Item is required';
+    }
+    return '';
+  }
 
   addItem() {
-    this.orderService.addFoodItem(this.currentItem);
-    this.currentItem = '';
-  }
-
-  clearItems() {
-    this.items = [];
-  }
-
-  toggleSelection(index: number) {
-    const selectedIndex = this.selectedIndices.indexOf(index);
-    if (this.selectedIndices.length === 1) {
-      if (selectedIndex !== -1) {
-        this.selectedIndices.splice(selectedIndex, 1);
-      } else {
-        this.selectedIndices = [];
-        this.selectedIndices.push(index);
-      }
+    if (!this.currentItem) {
+      this.itemFormControl.markAsTouched();
+      this.itemFormControl.setErrors({ 'required': true });
     } else {
-      this.selectedIndices.push(index);
+      this.orderService.addFoodItem(this.currentItem);
+      this.currentItem = '';
+      this.itemFormControl.setValue('');
     }
   }
 
-  deleteSelected() {
-    this.items = this.items.filter((item, index) => !this.selectedIndices.includes(index));
-    this.selectedIndices = [];
-  }
-
-  isSelected(index: number): boolean {
-    return this.selectedIndices.includes(index);
+  deleteItem(item: { id: string, name: string }) {
+    this.items = this.items.filter(i => i.id !== item.id);
+    this.orderService.deleteFoodItem(item.name);
   }
 
 }

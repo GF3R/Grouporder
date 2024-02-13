@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Order } from 'src/model/Order';
 import { GrouporderService } from 'src/services/grouporder.service';
-import { OrderListComponent } from '../order-list/order-list.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-order-item',
@@ -10,41 +10,61 @@ import { OrderListComponent } from '../order-list/order-list.component';
   styleUrls: ['./add-order-item.component.css'],
 })
 export class AddOrderItemComponent implements OnInit {
-  @ViewChild(OrderListComponent) orderListComponent!: OrderListComponent;
-  @Input() groupOrderId!: string | null;
-
-  @Input() order: Order | undefined;
-
-  @Input() parentItems: string[] = [];
-
-  @Output() empty: boolean | undefined;
+  parentItems: string[] = [];
 
   form: FormGroup<{
     customerName: FormControl;
     items: FormControl;
     total: FormControl;
   }>;
+  currentGroupOrderId: any;
+  showErrorMessage = false;
+
   constructor(
     private formBuilder: FormBuilder,
-    private orderService: GrouporderService
+    private orderService: GrouporderService,
+    private route: ActivatedRoute,
   ) {
-    this.form = new Order('', [], 0).createFormGroup(this.formBuilder);
+    this.form = new Order('', [], null).createFormGroup(this.formBuilder);
+    this.orderService.foodItems$.subscribe(items => {
+      this.parentItems = items;
+    });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.currentGroupOrderId = params['id'];
+    });
+  }
+
+  getErrorMessage(controlName: string): string {
+    if (controlName === 'customerName') {
+      return 'Customername is required';
+    } else if (controlName === 'total') {
+      if (this.form.get('total')!.hasError('pattern')) {
+        return 'Total must contain only digits';
+      } else {
+        return 'Total is required';
+      }
+    }
+    return '';
+  }
 
   addToOrder() {
     if (this.parentItems.length > 0) {
-      this.form.patchValue({ items: this.parentItems });
+      const order = new Order(
+        this.form.get('customerName')!.value,
+        this.parentItems.map(item => ({ id: '1', name: item })),
+        this.form.get('total')!.value
+      );
       this.orderService.addCustomerOrderWithValidation(
-        this.groupOrderId!,
-        Order.createFromForm(this.form)
+        this.currentGroupOrderId,
+        order
       ).subscribe();
       this.form.reset();
-      this.orderListComponent.clearItems();
+      this.orderService.clearFoodItems();
     } else {
-      this.empty = true;
+      this.showErrorMessage = true;
     }
   }
-
 }
