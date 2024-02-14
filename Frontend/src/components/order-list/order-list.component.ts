@@ -11,10 +11,14 @@ export class OrderListComponent implements OnInit {
   items: string[] = [];
   currentItem = '';
   itemFormControl = new FormControl('', [Validators.required]);
+  foodItems$ = this.orderService.foodItems$;
 
   constructor(private orderService: GrouporderService) {
-    this.orderService.foodItems$.subscribe(items => {
+    this.foodItems$.subscribe(items => {
       this.items = items;
+      if (items.length === 0) {
+        this.itemFormControl.reset();
+      }
     });
   }
 

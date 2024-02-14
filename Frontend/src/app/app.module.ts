@@ -20,8 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { OrderItemComponent } from '../components/order-item/order-item.component';
-
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -33,6 +32,7 @@ import { OrderItemComponent } from '../components/order-item/order-item.componen
     OrderItemComponent,
   ],
   imports: [
+    MatTooltipModule,
     MatIconModule,
     MatInputModule,
     MatListModule,

@@ -18,7 +18,6 @@ export class AddOrderItemComponent implements OnInit {
     total: FormControl;
   }>;
   currentGroupOrderId: any;
-  showErrorMessage = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,8 +64,6 @@ export class AddOrderItemComponent implements OnInit {
         this.form.reset();
         this.orderService.clearFoodItems();
       });
-    } else {
-      this.showErrorMessage = true;
     }
   }
 }

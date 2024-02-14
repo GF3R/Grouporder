@@ -69,11 +69,11 @@
     <form [formGroup]="groupOrderForm">
       <mat-form-field appearance="fill">
         <mat-label>Group order name</mat-label>
-        <input type="text" matInput formControlName="name" />
+        <input matInput formControlName="name" />
         <button
           mat-icon-button
           (click)="addGroupOrder()"
-          [disabled]="!name"
+          [disabled]="!name!.value"
           matSuffix
         >
           <mat-icon>add</mat-icon>

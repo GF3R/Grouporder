@@ -10,6 +10,7 @@
     mat-icon-button
     matSuffix
     (click)="itemFormControl.value && addItem()"
+    [disabled]="!itemFormControl.value"
   >
     <mat-icon>add</mat-icon>
   </button>
