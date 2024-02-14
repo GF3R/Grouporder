@@ -1,24 +1,7 @@
-
 body {
     margin: 50px;
 }
 
-.no-click {
-    pointer-events: none;
-    margin-top: 10px; 
-}
-
-input {
-    padding: 10px; 
-    border: 1px solid black;
-    border-radius: 4px;
-}
-
-.mat-table {
-    overflow: auto;
-    max-height: 500px;
-  }
-
-  tr.mat-footer-row {
+tr.mat-footer-row {
     font-weight: bold;
-  }
+}

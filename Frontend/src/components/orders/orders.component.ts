@@ -12,16 +12,12 @@ import { GrouporderService } from 'src/services/grouporder.service';
 export class OrdersComponent implements OnInit {
   displayedColumns = ['Index', 'Customer', 'Order Total', 'actions'];
   groupOrders$ = this.groupOrderService.groupOrders$;
-
   editModeMap: Map<string, boolean> = new Map();
-
   currentItem = '';
-
   groupOrderForm: FormGroup<{
     name: FormControl;
   }>;
-  editedOrder: GroupOrder | undefined;
-  editModeIndex: number | undefined;
+
   constructor(private groupOrderService: GrouporderService, private formBuilder: FormBuilder) {
     this.groupOrderForm = new GroupOrder('').createFormGroup(this.formBuilder);
   }
@@ -60,11 +56,12 @@ export class OrdersComponent implements OnInit {
   }
 
   saveChanges(order: GroupOrder, id: string) {
-    this.groupOrderService.updateGroupOrder(order, id).subscribe();
+    this.groupOrderService.updateGroupOrder(order, id).subscribe(() => { this.groupOrderService.getActiveGroupOrders().subscribe(); });
     this.editModeMap.set(id, false);
   }
 
   cancelEdit(id: string) {
+    this.groupOrderService.getActiveGroupOrders().subscribe();
     this.editModeMap.set(id, false);
   }
 

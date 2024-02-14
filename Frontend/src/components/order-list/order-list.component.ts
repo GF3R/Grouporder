@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { GrouporderService } from 'src/services/grouporder.service';
 
@@ -10,7 +10,6 @@ import { GrouporderService } from 'src/services/grouporder.service';
 export class OrderListComponent implements OnInit {
   items: string[] = [];
   currentItem = '';
-
   itemFormControl = new FormControl('', [Validators.required]);
 
   constructor(private orderService: GrouporderService) {

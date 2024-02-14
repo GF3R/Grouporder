@@ -54,15 +54,17 @@ export class AddOrderItemComponent implements OnInit {
     if (this.parentItems.length > 0) {
       const order = new Order(
         this.form.get('customerName')!.value,
-        this.parentItems.map(item => ({ id: '1', name: item })),
+        this.parentItems.map(item => ({ id: '', name: item })),
         this.form.get('total')!.value
       );
       this.orderService.addCustomerOrderWithValidation(
         this.currentGroupOrderId,
         order
-      ).subscribe();
-      this.form.reset();
-      this.orderService.clearFoodItems();
+      ).subscribe(() => {
+        this.orderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
+        this.form.reset();
+        this.orderService.clearFoodItems();
+      });
     } else {
       this.showErrorMessage = true;
     }

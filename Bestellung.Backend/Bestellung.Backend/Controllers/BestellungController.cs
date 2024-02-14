@@ -18,7 +18,7 @@ namespace Bestellung.Backend.Controllers
         [HttpGet("getActiveGroupOrders")]
         public IActionResult GetActiveGroupOrders()
         {
-            var groupOrders = _context.GroupOrder.Where(t => t.Status).ToList();
+            var groupOrders = _context.GroupOrder.Where(t => t.Status).OrderBy(t => t.Name).ToList();
             return Ok(groupOrders);
         }
 
@@ -82,7 +82,7 @@ namespace Bestellung.Backend.Controllers
                 Items = order.Items.Select(item => new ItemDto { Id = item.Id.ToString(), Name = item.Name }).ToList(),
                 Total = order.Total,
                 GroupOrderId = order.GroupOrderId,
-            }).ToList();
+            }).OrderBy(o => o.CustomerName).ToList();
 
             return Ok(ordersDto);
         }

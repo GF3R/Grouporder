@@ -23,10 +23,6 @@ export class GrouporderService {
 
   constructor(private http: HttpClient) { }
 
-  clearFoodItems(): void {
-    this.foodItemsSubject.next([]);
-  }
-
   private handleError<T>(_operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);
@@ -46,10 +42,6 @@ export class GrouporderService {
   }
 
   addGroupOrderWithValidation(newGroupOrder: GroupOrder): Observable<GroupOrder[]> {
-    const currentGroupOrders = this.groupOrdersSubject.getValue();
-    const updatedGroupOrders = [...currentGroupOrders, newGroupOrder];
-    this.groupOrdersSubject.next(updatedGroupOrders);
-
     const url = `${this.url}/addGroupOrder`;
     return this.http.post<GroupOrder[]>(url, newGroupOrder).pipe(
       catchError(this.handleError<GroupOrder[]>('addGroupOrder'))
@@ -83,10 +75,6 @@ export class GrouporderService {
     if (!order.customerName || !order.items || !order.total) {
       return of('Please fill in all required fields.');
     }
-    const currentCustomerOrders = this.customerOrdersSubject.getValue();
-    const updatedCustomerOrders = [...currentCustomerOrders, order];
-    this.customerOrdersSubject.next(updatedCustomerOrders);
-
     const url = `${this.url}/${id}/addCustomerOrder`;
     return this.http.post<Order[]>(url, order).pipe(
       catchError(this.handleError<Order[]>('addCustomerOrder'))
@@ -102,7 +90,7 @@ export class GrouporderService {
 
   deleteCustomerOrder(id: string): Observable<Order[]> {
     const url = `${this.url}/deleteCustomerOrder/${id}`;
-    this.customerOrdersSubject.next(this.customerOrdersSubject.value.filter(order => order.id !== id)); // Remove the deleted order from the subject
+    this.customerOrdersSubject.next(this.customerOrdersSubject.value.filter(order => order.id !== id));
     return this.http.delete<Order[]>(url).pipe(
       catchError(this.handleError<Order[]>('deleteCustomerOrder'))
     );
@@ -113,10 +101,11 @@ export class GrouporderService {
     const updatedItems = [...currentItems, item];
     this.foodItemsSubject.next(updatedItems);
 
-    const url = `${this.url}/addItem`;
-    return this.http.post<string[]>(url, item).pipe(
-      catchError(this.handleError<string[]>('addItem'))
-    );
+    // const url = `${this.url}/addItem`;
+    // return this.http.post<string[]>(url, item).pipe(
+    //   catchError(this.handleError<string[]>('addItem'))
+    // );
+    return of();
   }
 
   deleteFoodItem(index: number): Observable<void> {
@@ -124,10 +113,15 @@ export class GrouporderService {
     const updatedItems = currentItems.filter((item, i) => i !== index);
     this.foodItemsSubject.next(updatedItems);
 
-    const url = `${this.url}/deleteItem/${index}`;
-    return this.http.delete<void>(url).pipe(
-      catchError(this.handleError<void>('deleteItem'))
-    );
+    // const url = `${this.url}/deleteItem/${index}`;
+    // return this.http.delete<void>(url).pipe(
+    //   catchError(this.handleError<void>('deleteItem'))
+    // );
+    return of();
+  }
+
+  clearFoodItems(): void {
+    this.foodItemsSubject.next([]);
   }
 
 }
