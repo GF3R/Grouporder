@@ -13,7 +13,6 @@ export class OrdersComponent implements OnInit {
   displayedColumns = ['Index', 'Customer', 'Order Total', 'actions'];
   groupOrders$ = this.groupOrderService.groupOrders$;
   editModeMap: Map<string, boolean> = new Map();
-  currentItem = '';
   groupOrderForm: FormGroup<{
     name: FormControl;
   }>;
@@ -24,6 +23,10 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.groupOrderService.getActiveGroupOrders().subscribe();
+  }
+
+  get name() {
+    return this.groupOrderForm.get('name');
   }
 
   getErrorMessage(): string {
