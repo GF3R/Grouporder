@@ -29,14 +29,6 @@ export class OrdersComponent implements OnInit {
     return this.groupOrderForm.get('name');
   }
 
-  getErrorMessage(): string {
-    const nameControl = this.groupOrderForm.get('name');
-    if (nameControl!.hasError('required') && nameControl!.touched) {
-      return 'Group order name is required';
-    }
-    return '';
-  }
-
   addGroupOrder() {
     try {
       this.groupOrderService.addGroupOrderWithValidation(GroupOrder.createFromForm(

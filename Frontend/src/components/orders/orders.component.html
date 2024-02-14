@@ -79,13 +79,8 @@
           <mat-icon>add</mat-icon>
         </button>
 
-        <mat-error
-          *ngIf="
-            groupOrderForm.get('name')!.invalid &&
-            groupOrderForm.get('name')!.touched
-          "
-        >
-          {{ getErrorMessage() }}
+        <mat-error *ngIf="name!.hasError('required')">
+          Group order name is required
         </mat-error>
       </mat-form-field>
     </form>
