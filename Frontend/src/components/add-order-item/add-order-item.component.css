@@ -1,3 +1,11 @@
 button{
     margin-right: 10px;
 }
+
+.invisibleButton {
+    background: transparent;
+    border: none !important;
+    font-size:0;
+    position: relative;
+    bottom: 2.8px;
+}

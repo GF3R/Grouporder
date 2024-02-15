@@ -31,18 +31,21 @@
     </mat-form-field>
   </form>
   <br />
-  <button
-    (click)="addToOrder()"
-    mat-raised-button
-    [disabled]="
-      !parentItems.length ||
-      form.get('total')!.invalid ||
-      form.get('customerName')!.invalid
-    "
-    matTooltip="Please fill in all required fields"
-    matTooltipPosition="above"
-  >
-    hinzufügen
+  <button class="invisibleButton" (mouseenter)="tooltip.show()">
+    <button
+      (click)="addToOrder()"
+      mat-raised-button
+      [disabled]="
+        !parentItems.length ||
+        form.get('total')!.invalid ||
+        form.get('customerName')!.invalid
+      "
+      #tooltip="matTooltip"
+      matTooltip="Please fill in all required fields"
+      matTooltipPosition="below"
+    >
+      hinzufügen
+    </button>
   </button>
   <button mat-raised-button [routerLink]="['/orders']">Back</button>
 </body>
