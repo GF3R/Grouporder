@@ -30,15 +30,13 @@ export class OrdersComponent implements OnInit {
   }
 
   addGroupOrder() {
-    try {
-      this.groupOrderService.addGroupOrderWithValidation(GroupOrder.createFromForm(
-        this.groupOrderForm
-      )).subscribe(() => {
+    if (this.name!.value) {
+      const groupOrder = new GroupOrder(this.groupOrderForm.get('name')!.value);
+      this.groupOrderService.addGroupOrderWithValidation(groupOrder
+      ).subscribe(() => {
         this.groupOrderService.getActiveGroupOrders().subscribe();
         this.groupOrderForm.reset();
       });
-    } catch (error) {
-      console.error('Error adding group order:', error);
     }
   }
 

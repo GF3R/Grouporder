@@ -72,9 +72,6 @@ export class GrouporderService {
   }
 
   addCustomerOrderWithValidation(id: string, order: Order): Observable<string | Order[]> {
-    if (!order.customerName || !order.items || !order.total) {
-      return of('Please fill in all required fields.');
-    }
     const url = `${this.url}/${id}/addCustomerOrder`;
     return this.http.post<Order[]>(url, order).pipe(
       catchError(this.handleError<Order[]>('addCustomerOrder'))

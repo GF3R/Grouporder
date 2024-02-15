@@ -11,18 +11,14 @@ export class GroupOrder {
     this.name = name;
   }
 
-  createFormGroup(formBuilder: FormBuilder): FormGroup<{
-    name: FormControl;
-  }> {
+  createFormGroup(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({
-      name: [this.name, [Validators.required]],
+      name: ['', [Validators.required]],
     });
   }
 
   static createFromForm(
-    form: FormGroup<{
-      name: FormControl;
-    }>,
+    form: FormGroup
   ): GroupOrder {
     return new GroupOrder(
       form.value.name

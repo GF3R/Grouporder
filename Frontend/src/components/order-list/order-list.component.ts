@@ -37,7 +37,7 @@ export class OrderListComponent implements OnInit {
 
   addItem() {
     this.orderService.addFoodItem(this.currentItem);
-    this.itemFormControl.setValue(null);
+    this.itemFormControl.reset();
     this.currentItem = '';
   }
 

@@ -69,16 +69,19 @@
     <form [formGroup]="groupOrderForm">
       <mat-form-field appearance="fill">
         <mat-label>Group order name</mat-label>
-        <input matInput formControlName="name" />
+        <input
+          matInput
+          formControlName="name"
+          (keydown.enter)="name!.value && addGroupOrder()"
+        />
         <button
           mat-icon-button
-          (click)="addGroupOrder()"
-          [disabled]="!name!.value"
           matSuffix
+          (click)="name!.value && addGroupOrder()"
+          [disabled]="!name!.value"
         >
           <mat-icon>add</mat-icon>
         </button>
-
         <mat-error *ngIf="name!.hasError('required')">
           Group order name is required
         </mat-error>
