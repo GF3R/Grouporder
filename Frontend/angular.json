@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Nx.GroupOrder:build:production"
+              "buildTarget": "Nx.GroupOrder:build:production"
             },
             "development": {
-              "browserTarget": "Nx.GroupOrder:build:development"
+              "buildTarget": "Nx.GroupOrder:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Nx.GroupOrder:build"
+            "buildTarget": "Nx.GroupOrder:build"
           }
         },
         "test": {
