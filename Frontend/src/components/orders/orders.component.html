@@ -12,7 +12,9 @@
         <th mat-header-cell *matHeaderCellDef>Grouporder</th>
         <td mat-cell *matCellDef="let order">
           <div *ngIf="!isEditMode(order.id)">
-            <a href="/order/{{ order.id }}">{{ order.name }}</a>
+            <a href="/order/{{ order.id }}/{{ order.name }}">{{
+              order.name
+            }}</a>
           </div>
           <div *ngIf="isEditMode(order.id)">
             <input [(ngModel)]="order.name" />
@@ -40,7 +42,7 @@
           <button
             mat-icon-button
             *ngIf="isEditMode(order.id)"
-            (click)="saveChanges(order, order.id)"
+            (click)="saveChanges(order.name, order.id)"
           >
             <mat-icon>save</mat-icon>
           </button>
@@ -69,11 +71,7 @@
     <form [formGroup]="groupOrderForm">
       <mat-form-field appearance="fill">
         <mat-label>Group order name</mat-label>
-        <input
-          matInput
-          formControlName="name"
-          (keydown.enter)="name!.value && addGroupOrder()"
-        />
+        <input matInput formControlName="name" />
         <button
           mat-icon-button
           matSuffix

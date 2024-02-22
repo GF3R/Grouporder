@@ -1268,6 +1268,33 @@
             "rid": "win"
           }
         }
+      },
+      "Bestellung.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "7.0.10"
+        },
+        "compile": {
+          "bin/placeholder/Bestellung.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Bestellung.Core.dll": {}
+        }
+      },
+      "Bestellung.Database/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Bestellung.Core": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "7.0.10"
+        },
+        "compile": {
+          "bin/placeholder/Bestellung.Database.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Bestellung.Database.dll": {}
+        }
       }
     }
   },
@@ -4010,11 +4037,23 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Bestellung.Core/1.0.0": {
+      "type": "project",
+      "path": "../Bestellung.Core/Bestellung.Core.csproj",
+      "msbuildProject": "../Bestellung.Core/Bestellung.Core.csproj"
+    },
+    "Bestellung.Database/1.0.0": {
+      "type": "project",
+      "path": "../Bestellung.Database/Bestellung.Database.csproj",
+      "msbuildProject": "../Bestellung.Database/Bestellung.Database.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
       "AWSSDK.Core >= 3.7.300.28",
+      "Bestellung.Core >= 1.0.0",
+      "Bestellung.Database >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.10",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.10",
       "Microsoft.EntityFrameworkCore.Tools >= 7.0.10",
@@ -4050,7 +4089,14 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\tns\\git\\Grouporder\\Bestellung.Backend\\Bestellung.Core\\Bestellung.Core.csproj": {
+              "projectPath": "C:\\Users\\tns\\git\\Grouporder\\Bestellung.Backend\\Bestellung.Core\\Bestellung.Core.csproj"
+            },
+            "C:\\Users\\tns\\git\\Grouporder\\Bestellung.Backend\\Bestellung.Database\\Bestellung.Database.csproj": {
+              "projectPath": "C:\\Users\\tns\\git\\Grouporder\\Bestellung.Backend\\Bestellung.Database\\Bestellung.Database.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

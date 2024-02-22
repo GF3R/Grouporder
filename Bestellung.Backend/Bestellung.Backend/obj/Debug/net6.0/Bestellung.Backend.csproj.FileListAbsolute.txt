@@ -166,3 +166,7 @@ C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\obj\Debug\net6
 C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\obj\Debug\net6.0\Bestellung.Backend.pdb
 C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\obj\Debug\net6.0\Bestellung.Backend.genruntimeconfig.cache
 C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\obj\Debug\net6.0\ref\Bestellung.Backend.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\bin\Debug\net6.0\Bestellung.Core.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\bin\Debug\net6.0\Bestellung.Core.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\bin\Debug\net6.0\Bestellung.Database.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Backend\bin\Debug\net6.0\Bestellung.Database.pdb

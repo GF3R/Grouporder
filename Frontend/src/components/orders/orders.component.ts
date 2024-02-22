@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GroupOrder } from 'src/model/GroupOrder';
 import { GrouporderService } from 'src/services/grouporder.service';
 
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.component.html',
@@ -23,6 +24,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.groupOrderService.getActiveGroupOrders().subscribe();
+
   }
 
   get name() {
@@ -31,8 +33,7 @@ export class OrdersComponent implements OnInit {
 
   addGroupOrder() {
     if (this.name!.value) {
-      const groupOrder = new GroupOrder(this.groupOrderForm.get('name')!.value);
-      this.groupOrderService.addGroupOrderWithValidation(groupOrder
+      this.groupOrderService.addGroupOrderWithValidation(this.name!.value
       ).subscribe(() => {
         this.groupOrderService.getActiveGroupOrders().subscribe();
         this.groupOrderForm.reset();
@@ -48,8 +49,8 @@ export class OrdersComponent implements OnInit {
     return this.editModeMap.get(id) || false;
   }
 
-  saveChanges(order: GroupOrder, id: string) {
-    this.groupOrderService.updateGroupOrder(order, id).subscribe(() => { this.groupOrderService.getActiveGroupOrders().subscribe(); });
+  saveChanges(name: string, id: string) {
+    this.groupOrderService.updateGroupOrder(name, id).subscribe(() => { this.groupOrderService.getActiveGroupOrders().subscribe(); });
     this.editModeMap.set(id, false);
   }
 

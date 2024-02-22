@@ -22,7 +22,7 @@ namespace Bestellung.Backend.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Bestellung.Backend.GroupOrder", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.GroupOrder", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace Bestellung.Backend.Migrations
                     b.ToTable("GroupOrder");
                 });
 
-            modelBuilder.Entity("Bestellung.Backend.Item", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.Item", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace Bestellung.Backend.Migrations
                     b.ToTable("Item");
                 });
 
-            modelBuilder.Entity("Bestellung.Backend.Order", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,9 +86,9 @@ namespace Bestellung.Backend.Migrations
                     b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("Bestellung.Backend.Item", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.Item", b =>
                 {
-                    b.HasOne("Bestellung.Backend.Order", "Order")
+                    b.HasOne("Bestellung.Core.Models.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -97,9 +97,9 @@ namespace Bestellung.Backend.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Bestellung.Backend.Order", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.Order", b =>
                 {
-                    b.HasOne("Bestellung.Backend.GroupOrder", "GroupOrder")
+                    b.HasOne("Bestellung.Core.Models.GroupOrder", "GroupOrder")
                         .WithMany()
                         .HasForeignKey("GroupOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -108,7 +108,7 @@ namespace Bestellung.Backend.Migrations
                     b.Navigation("GroupOrder");
                 });
 
-            modelBuilder.Entity("Bestellung.Backend.Order", b =>
+            modelBuilder.Entity("Bestellung.Core.Models.Order", b =>
                 {
                     b.Navigation("Items");
                 });

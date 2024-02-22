@@ -40,15 +40,16 @@ export class OrderComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.currentGroupOrderId = params['id'];
+      this.currentGroupOrderName = params['name'];
     });
-    this.groupOrderService.getActiveGroupOrders().subscribe();
+    // this.groupOrderService.getActiveGroupOrders().subscribe();
     this.groupOrderService.getCustomerOrdersFromGroupOrder(this.currentGroupOrderId).subscribe();
-    this.groupOrders$.pipe(
-      map((orders: GroupOrder[]) => {
-        const order = orders.find(u => u.id = this.currentGroupOrderId);
-        return order ? this.currentGroupOrderName = `${order.name}` : 'User not found';
-      })
-    ).subscribe();
+    // this.groupOrders$.pipe(
+    //   map((orders: GroupOrder[]) => {
+    //     const order = orders.find(u => u.id = this.currentGroupOrderId);
+    //     return order ? this.currentGroupOrderName = `${order.name}` : 'User not found';
+    //   })
+    // ).subscribe();
   }
 
   // get gettotal(): number {

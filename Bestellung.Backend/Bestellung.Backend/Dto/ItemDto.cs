@@ -2,7 +2,7 @@
 {
     public class ItemDto
     {
-        public string Id { get; set; } // Keep this as a string
+        public string Id { get; set; } 
         public string Name { get; set; }
     }
 }

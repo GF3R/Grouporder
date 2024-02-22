@@ -22,4 +22,9 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Bestellung.Core\Bestellung.Core.csproj" />
+    <ProjectReference Include="..\Bestellung.Database\Bestellung.Database.csproj" />
+  </ItemGroup>
+
 </Project>
