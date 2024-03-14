@@ -1,0 +1,88 @@
+<body>
+  <h2>Group Order: {{ currentGroupOrderName }}</h2>
+
+  <div *ngIf="currentOrders$ | async as orders">
+    <table mat-table [dataSource]="orders">
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let order">
+          <div *ngIf="!isEditMode(order.id)">
+            {{ order.customerName }}
+          </div>
+          <div *ngIf="isEditMode(order.id)">
+            <input [(ngModel)]="order.customerName" />
+          </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <ng-container matColumnDef="items">
+        <th mat-header-cell *matHeaderCellDef>Foodlist</th>
+        <td mat-cell *matCellDef="let order">
+          <app-order-item
+            [order]="order"
+            [toggleEditMode]="isEditMode(order.id)"
+          ></app-order-item>
+        </td>
+        <td mat-footer-cell *matFooterCellDef><strong>Total sum</strong></td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>Total</th>
+        <td mat-cell *matCellDef="let order">
+          <div *ngIf="!isEditMode(order.id)">
+            {{ order.total | currency : "CHF " }}
+          </div>
+          <div *ngIf="isEditMode(order.id)">
+            <input type="number" [(ngModel)]="order.total" />
+          </div>
+        </td>
+        <td mat-footer-cell *matFooterCellDef>
+          <strong> {{ totalSum$ | async | currency : "CHF " }}</strong>
+        </td></ng-container
+      >
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let order">
+          <button
+            mat-icon-button
+            *ngIf="!isEditMode(order.id)"
+            (click)="toggleEditMode(order.id)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="isEditMode(order.id)"
+            (click)="saveChanges(order, order.id)"
+          >
+            <mat-icon>save</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="isEditMode(order.id)"
+            (click)="cancelEdit(order.id)"
+          >
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="!isEditMode(order.id)"
+            (click)="deleteOrder(order.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </table>
+    <br />
+  </div>
+  <br />
+  <app-add-order-item></app-add-order-item>
+</body>

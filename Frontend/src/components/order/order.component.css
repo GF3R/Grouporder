@@ -1,0 +1,7 @@
+body {
+    margin: 50px;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
+}

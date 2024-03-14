@@ -1,18 +1,18 @@
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Input } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 export class Order {
-  id: number;
+  id?: string;
   customerName: string;
   items: string[];
   total: number;
+  value: any;
 
   constructor(
-    id: number,
     customerName: string,
     items: string[],
     total: number
   ) {
-    this.id = id;
     this.customerName = customerName;
     this.items = items;
     this.total = total;
@@ -24,26 +24,24 @@ export class Order {
     total: FormControl;
   }> {
     return formBuilder.group({
-      customerName: [this.customerName],
-      items: [this.items],
-      total: [this.total],
+      customerName: [this.customerName, Validators.required],
+      items: [this.items, Validators.required],
+      total: [this.total, Validators.required],
     });
   }
 
   static createFromForm(
-    id: number,
     form: FormGroup<{
       customerName: FormControl;
       items: FormControl;
       total: FormControl;
     }>,
-    items: string[]
   ): Order {
     return new Order(
-      id,
       form.value.customerName,
       form.value.items,
       form.value.total
     );
   }
+
 }

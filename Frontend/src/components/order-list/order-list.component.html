@@ -1,0 +1,28 @@
+<mat-form-field appearance="fill">
+  <mat-label>Foodname</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="itemFormControl"
+    (keydown.enter)="itemFormControl.value && addItem()"
+  />
+  <button
+    mat-icon-button
+    matSuffix
+    (click)="itemFormControl.value && addItem()"
+    [disabled]="!itemFormControl.value"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-error *ngIf="itemFormControl.hasError('required')">
+    {{ getErrorMessage() }}
+  </mat-error>
+</mat-form-field>
+<mat-list>
+  <mat-list-item *ngFor="let item of items; let i = index">
+    {{ item }}
+    <button mat-icon-button (click)="deleteItem(i)">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>

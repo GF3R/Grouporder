@@ -1,0 +1,15 @@
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.csproj.AssemblyReference.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.AssemblyInfoInputs.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.AssemblyInfo.cs
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.csproj.CoreCompileInputs.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\bin\Debug\net6.0\Bestellung.Database.deps.json
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\bin\Debug\net6.0\Bestellung.Database.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\bin\Debug\net6.0\Bestellung.Database.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\bin\Debug\net6.0\Bestellung.Core.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\bin\Debug\net6.0\Bestellung.Core.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.csproj.CopyComplete
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\refint\Bestellung.Database.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\Bestellung.Database.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Database\obj\Debug\net6.0\ref\Bestellung.Database.dll

@@ -1,0 +1,51 @@
+<body>
+  <h2>Bestellung hinzufügen</h2>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Dein Name</mat-label>
+      <input matInput formControlName="customerName" />
+      <mat-icon matSuffix></mat-icon>
+      <mat-error
+        *ngIf="
+          form.get('customerName')!.invalid && form.get('customerName')!.touched
+        "
+      >
+        {{ getErrorMessage("customerName") }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+  <app-order-list> </app-order-list>
+
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Total deiner Bestellung</mat-label>
+      <input matInput formControlName="total" pattern="[0-9]+(\.[0-9]+)?" />
+      <mat-icon matSuffix></mat-icon>
+      <mat-error
+        *ngIf="form.get('total')!.invalid && form.get('total')!.touched"
+      >
+        {{ getErrorMessage("total") }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <br />
+  <button class="invisibleButton" (mouseenter)="tooltip.show()">
+    <button
+      (click)="addToOrder()"
+      mat-raised-button
+      [disabled]="
+        !parentItems.length ||
+        form.get('total')!.invalid ||
+        form.get('customerName')!.invalid
+      "
+      #tooltip="matTooltip"
+      matTooltip="Please fill in all required fields"
+      matTooltipPosition="below"
+    >
+      hinzufügen
+    </button>
+  </button>
+  <button mat-raised-button [routerLink]="['/orders']">Back</button>
+</body>

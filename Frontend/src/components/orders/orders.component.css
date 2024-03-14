@@ -1,0 +1,19 @@
+body {
+    margin: 50px;
+}
+
+a:link, a:visited {
+    background-color:rgb(114, 180, 114);
+    color: black;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 50px;
+  }
+  
+  a:hover, a:active {
+    background-color: rgb(211, 209, 209);
+  }
+
+ 

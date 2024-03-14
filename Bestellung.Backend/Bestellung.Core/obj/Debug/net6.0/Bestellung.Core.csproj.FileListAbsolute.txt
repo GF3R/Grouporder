@@ -1,0 +1,12 @@
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\bin\Debug\net6.0\Bestellung.Core.deps.json
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\bin\Debug\net6.0\Bestellung.Core.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\bin\Debug\net6.0\Bestellung.Core.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.csproj.AssemblyReference.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.AssemblyInfoInputs.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.AssemblyInfo.cs
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.csproj.CoreCompileInputs.cache
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\refint\Bestellung.Core.dll
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\Bestellung.Core.pdb
+C:\Users\tns\git\Grouporder\Bestellung.Backend\Bestellung.Core\obj\Debug\net6.0\ref\Bestellung.Core.dll
